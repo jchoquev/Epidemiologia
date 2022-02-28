@@ -1,0 +1,858 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf_token" content="{{ csrf_token }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css">
+    <link rel="stylesheet" href="https://select2.github.io/select2-bootstrap-theme/css/select2-bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.bootstrap.min.css">
+    <title>NetLab V2</title>
+    <style type="text/css"> 
+      .mayuscula { text-transform: uppercase;}   
+    </style> 
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Epidemeologia</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <!--li class="nav-item active">
+            <a class="nav-link" href="{% url 'index' %}">NetLAb v2</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Muestra Antigena</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Pricing</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled">Disabled</a>
+          </li-->
+        </ul>
+      </div>
+    </nav>
+    <div class="container">
+      <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="false">NetLab V2</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="true">NotiCovid (-)</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">NotiCovid (-) Resumen</a>
+        </li>
+      </ul>
+      <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+          <div class="row justify-content-md-center">
+            <div class="col-md-auto">
+              <form action="/guadardatosini/" method="get" id="ndatos" class="was-validated">
+                <div class="form-row align-items-center">
+                  <div class="col-auto">
+                    <label class="sr-only" for="input_tdocumento">N-DOCUMENTO</label>
+                    <select class="custom-select custom-select-sm" name="input_tdocumento" id="input_tdocumento" required>
+                      {% for value in tdocumento %}
+                      <option value="{{value.pk}}">{{value.documento}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="col-auto">
+                    <label class="sr-only" for="input__dni">N-DOCUMENTO</label>
+                    <input type="text" class="form-control form-control-sm" name="input__dni" id="input__dni" placeholder="N-DOCUMENTO" required>
+                  </div>
+                  <div class="col-auto">
+                    <label class="sr-only" for="input__fobtencion">FECHA OBTENCIÓN</label>
+                    <input type="date" class="form-control form-control-sm" name="input__fobtencion" id="input__fobtencion" required>
+                  </div>
+                  <div class="col-auto">
+                    <label class="sr-only" for="input__tprueba">TIPO-PRUEBA</label>
+                    <select class="custom-select custom-select-sm" name="input__tprueba" id="input__tprueba" required>
+                      {% for value in tipoprueba %}
+                      <option value="{{value.pk}}">{{value.nombre}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="col-auto">
+                    <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+
+          <div class="row justify-content-md-center bg-secondary pt-2 pb-2 mb-2">
+            <div class="col-md-auto" style="padding: 0px 0px; margin: 0px 0px;">
+              <form action="/guadardatosini/" method="get" id="ndatos" style="padding: 0px 0px; margin: 0px 0px;">
+                <div class="form-row align-items-center">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="input__id" checked>
+                    <label class="custom-control-label text-light" for="input__id" >ID ↓ </label>
+                  </div>
+                  <div class="col-auto">
+                    <input type="date" class="form-control form-control-sm" name="input__desde" id="input__desde" placeholder="N-DOCUMENTO" required>
+                    <small id="passwordHelpBlock" class="form-text text-light">
+                      Fecha desde...
+                    </small>
+                  </div>
+                  <div class="col-auto">
+                    <input type="date" class="form-control form-control-sm" name="input__hasta" id="input__hasta" required placeholder="N-DOCUMENTO">
+                    <small id="passwordHelpBlock" class="form-text text-light">
+                      Fecha hasta...
+                    </small>
+                  </div>
+                  <div class="col-auto">
+                    <select class="form-control form-control-sm" id="input__revisado">
+                      <option value="1">Todos...</option>
+                      <option value="2">Revisado</option>
+                      <option value="3">No revisado</option>
+                    </select>
+                    <small id="passwordHelpBlock" class="form-text text-light">
+                      Revisado...
+                    </small>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          
+          <table id="example" class="display" style="width:100%">
+            <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>T-DOCUMENTO</th>
+                  <th>NDOCUMENTO</th>
+                  <th>FECHA OBTENCION</th>
+                  <th>REVISADO</th>
+                  <th>T-MUESTRA</th>
+                  <th>ERROR</th>
+                  <th>ULTIMA ACTUALIZACION</th>
+                  <th></th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                  <th>ID</th>
+                  <th>T-DOCUMENTO</th>
+                  <th>NDOCUMENTO</th>
+                  <th>FECHA OBTENCION</th>
+                  <th>REVISADO</th>
+                  <th>T-MUESTRA</th>
+                  <th>ERROR</th>
+                  <th>ULTIMA ACTUALIZACION</th>
+                  <th></th>
+                </tr>
+            </tfoot>
+          </table>
+
+        </div>
+        <div class="tab-pane fade show active" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+          <!--Inicion NotiCovid-->
+          <form class="was-validated border pt-1 pr-1 pl-1 pb-1" id="formNegativos" method="POST" action="guardarnegativo/">
+            <input id="hidden__input_id" name="hidden__input_id" type="hidden">
+            <div class="form-row">
+              <div class="col-md-4">
+                <div class="row">
+                  <div class="col-md-12 mt-2">
+                    <label for="fnotificacion">Fecha de Notificación <i>(<b>Marcar: </b>alt+1)</i></label>
+                    <input type="date" class="form-control form-control-sm  mousetrap mayuscula" name="fnotificacion" id="fnotificacion" required>
+                  </div>
+                  <div class="col-md-12 mt-2">
+                    <label for="microred">MICRO RED</label>
+                    <input type="text" readonly class="form-control-plaintext form-control-sm mayuscula" name="microred" id="microred" required>
+                  </div>
+                  <div class="col-md-12 mt-2 mb-1">
+                    <label for="eess">EE.SS <i>(<b>Marcar: </b>alt+2)</i></label>
+                    <input type="hidden" name="eess" id="eess">
+                    <!--input type="text" class="form-control form-control-sm"  required-->
+                    <select class="custom-select  mousetrap mayuscula" id="select_eess" required></select>
+                  </div>
+                  <div class="col-md-12 mt-2">
+                    <label for="find_ndocumento">DNI <i>(<b>Buscar:</b> alt+b , <b>Marcar: </b>alt+3)</i></label>
+                    <input type="text" class="form-control form-control-sm mousetrap mayuscula" name="find_ndocumento" id="find_ndocumento" required>
+                  </div>
+                  <div class="col-md-12 mt-2">
+                    <label for="nombres">Nombres y Apellidos</label>
+                    <input type="text" class="form-control form-control-sm  mousetrap mayuscula" name="nombres" id="nombres" required>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="row">
+                  <div class="col-md-12 mt-2">
+                    <label for="telefono">Telefono <i>(<b>Marcar: </b>alt+4)</i></label>
+                    <input type="number" class="form-control form-control-sm  mousetrap mayuscula" name="telefono" id="telefono" required>
+                  </div>
+                  <div class="col-md-12 mt-2">
+                    <label for="edad">EDAD</label>
+                    <input type="number" class="form-control form-control-sm  mousetrap mayuscula" name="edad" id="edad" required>
+                  </div>
+                  <div class="col-md-12 mt-2">
+                    <label for="sexo">SEXO</label>
+                    <input type="text" class="form-control form-control-sm  mousetrap mayuscula" name="sexo" id="sexo" required>
+                  </div>
+                  <div class="col-md-12 mt-2">
+                    <label for="resid_actual">Residencia Actual <i>(<b>Marcar: </b>alt+5)</i></label>
+                    <input type="text" class="form-control form-control-sm  mousetrap mayuscula" name="resid_actual" id="resid_actual" required>
+                  </div>
+                  <div class="col-md-12 mt-2">
+                    <label for="vac_covid">Vacunado contra COVID-19? SI/NO</label>
+                    <input type="text" class="form-control form-control-sm  mousetrap mayuscula" name="vac_covid" id="vac_covid" required>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-5">
+                <div class="row">
+                  <div class="col-md-6 mt-2">
+                    <label for="f1dosis">FECHA 1º DOSIS <i>(alt+6)</i></label>
+                    <input type="date" class="form-control form-control-sm  mousetrap" min="2020-01-01" max="2022-12-31" name="f1dosis" id="f1dosis">
+                  </div>
+                  <div class="col-md-6 mt-2">
+                    <label for="pvacuna">VACUNA</label>
+                    <input type="text" class="form-control form-control-sm  mousetrap mayuscula" name="pvacuna" id="pvacuna">
+                  </div>
+                  <div class="col-md-6 mt-2">
+                    <label for="f2dosis">FECHA 2º DOSIS <i>(alt+7)</i></label>
+                    <input type="date" class="form-control form-control-sm  mousetrap" min="2020-01-01" max="2022-12-31" name="f2dosis" id="f2dosis">
+                  </div>
+                  <div class="col-md-6 mt-2">
+                    <label for="svacuna">VACUNA</label>
+                    <input type="text" class="form-control-plaintext form-control-sm  mousetrap mayuscula" name="svacuna" id="svacuna" disabled>
+                  </div>
+                  <div class="col-md-6 mt-2">
+                    <label for="f3dosis">FECHA 3º DOSIS <i>(alt+8)</i></label>
+                    <input type="date" class="form-control form-control-sm  mousetrap" min="2020-01-01" max="2022-12-31" name="f3dosis" id="f3dosis">
+                  </div>
+                  <div class="col-md-6 mt-2">
+                    <label for="tvacuna">VACUNA</label>
+                    <input type="text" class="form-control form-control-sm  mousetrap mayuscula" name="tvacuna" id="tvacuna">
+                  </div>
+                  <div class="col-md-12 mt-3">
+                    <!--button  type="submit"></button-->
+                    <a class="btn btn-primary btn-block" href="#">Guardar <i>(alt+g)</i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <div class="row justify-content-md-center bg-secondary pt-2 pb-2 mb-2">
+            <div class="col-md-auto" style="padding: 0px 0px; margin: 0px 0px;">
+              <form action="/guadardatosini/" method="get" id="ndatos" style="padding: 0px 0px; margin: 0px 0px;">
+                <div class="form-row align-items-center">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input mousetrap" id="inputn__id" checked>
+                    <label class="custom-control-label text-light" for="inputn__id" >ID ↓ </label>
+                    <small id="inputn__id" class="form-text text-light">
+                      <i>(ctrl+1)</i>
+                    </small>
+                  </div>
+                  <div class="col-auto">
+                    <input type="number" class="form-control form-control-sm mousetrap" name="inputn__desde" id="inputn__desde" placeholder="DESDE" required>
+                    <small id="passwordHelpBlock" class="form-text text-light">
+                      ID desde <i>(ctrl+2)</i>...
+                    </small>
+                  </div>
+                  <div class="col-auto">
+                    <input type="number" class="form-control form-control-sm mousetrap"  name="inputn__hasta" id="inputn__hasta" required placeholder="HASTA">
+                    <small id="passwordHelpBlock" class="form-text text-light">
+                      ID hasta <i>(ctrl+3)</i>...
+                    </small>
+                  </div>
+                  <div class="col-auto">
+                    <input type="date" class="form-control form-control-sm mousetrap" name="inputn__fnotificacion" id="inputn__fnotificacion" required placeholder="F. NOTIFICACIÓN">
+                    <small id="inputn__fnotificacion" class="form-text text-light">
+                      F.Notificación <i>(ctrl+4)</i>
+                    </small>
+                  </div>
+                  <div class="col-auto">
+                    <input type="text" class="form-control form-control-sm mousetrap" name="inputn__eess" id="inputn__eess" required placeholder="EE.SS">
+                    <small id="inputn__eess" class="form-text text-light">
+                      EE.SS <i>(ctrl+5)</i>
+                    </small>
+                  </div>
+                  <div class="col-auto">
+                    <button type="button" id="generarxslx" class="btn btn-primary btn-sm btn-block">Generar Excel</button>
+                    <small id="passwordHelpBlock" class="form-text text-light">
+                      Archivo <i>(ctrl+g)</i>..
+                    </small>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <table id="negativos" class="display mt-2" style="width:100%">
+            <thead>
+                <tr>
+                  <th></th>
+                  <th>ID</th>
+                  <th>F-NOTIFICACION</th>
+                  <th>MICRO RED</th>
+                  <th>EE.SS</th>
+                  <th>DNI</th>
+                  <th>NOMBRES Y APELLIDOS</th>
+                  <th>TELEFONO</th>
+                  <th>EDAD</th>
+                  <th>SEXO</th>
+                  <th>RESIDENCIA ACTUAL</th>
+                  <th>VACUNA??</th>
+                  <th>1ra DOSIS</th>
+                  <th>2da DOSIS</th>
+                  <th>VACUNA</th>
+                  <th>3ra DOSIS</th>
+                  <th>VACUNA</th>
+                </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th></th>
+                <th>ID</th>
+                <th>F-NOTIFICACION</th>
+                <th>MICRO RED</th>
+                <th>EE.SS</th>
+                <th>DNI</th>
+                <th>NOMBRES Y APELLIDOS</th>
+                <th>TELEFONO</th>
+                <th>EDAD</th>
+                <th>SEXO</th>
+                <th>RESIDENCIA ACTUAL</th>
+                <th>VACUNA??</th>
+                <th>1ra DOSIS</th>
+                <th>2da DOSIS</th>
+                <th>VACUNA</th>
+                <th>3ra DOSIS</th>
+                <th>VACUNA</th>
+              </tr>
+            </tfoot>
+          </table>
+       
+          <!--Fin NotiCovid-->
+        </div>
+        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+          <!--RESUMEN-->
+          <div class="row justify-content-md-center bg-secondary mt-3 pt-2 pb-2 mb-2">
+            <div class="col-md-auto" style="padding: 0px 0px; margin: 0px 0px;">
+              <form action="/guadardatosini/" method="get" id="ndatos" style="padding: 0px 0px; margin: 0px 0px;">
+                <div class="form-row align-items-center">
+                  <div class="custom-control custom-checkbox">
+                    <select class="custom-select custom-select-sm" name="input__group_agrupar" id="input__group_agrupar">
+                      <option value="1">Fecha Notificación</option>
+                      <option selected value="2">Micro Red</option>
+                      <option value="3">EE.SS</option>
+                      <option value="4">Fecha de Ingreso</option>
+                    </select>
+                    <small class="form-text text-light">
+                      <i>Agrupar por...</i>
+                    </small>
+                  </div>
+                  <div class="col-auto">
+                    <input type="date" class="form-control form-control-sm mousetrap" name="input__group_desde" id="input__group_desde" placeholder="DESDE" required>
+                    <small id="passwordHelpBlock" class="form-text text-light">
+                      F. Ingreso desde...
+                    </small>
+                  </div>
+                  <div class="col-auto">
+                    <input type="date" class="form-control form-control-sm mousetrap"  name="input__group_hasta" id="input__group_hasta" required placeholder="HASTA">
+                    <small id="passwordHelpBlock" class="form-text text-light">
+                      F. Ingreso hasta...
+                    </small>
+                  </div>
+                  <div class="col-auto">
+                    <input type="date" class="form-control form-control-sm mousetrap" name="input__group_fnotificacion" id="input__group_fnotificacion" required placeholder="F. NOTIFICACIÓN">
+                    <small class="form-text text-light">
+                      F.Notificación
+                    </small>
+                  </div>
+                  <div class="col-auto">
+                    <input type="text" class="form-control form-control-sm mousetrap" name="input__group_eess" id="input__group_eess" required placeholder="EE.SS">
+                    <small class="form-text text-light">
+                      EE.SS
+                    </small>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <table id="resumen_negativos" class="display mt-2" style="width:100%">
+            <thead>
+                <tr>
+                  <th>MICRO RED</th>
+                  <th>EE.SS</th>
+                  <th>F-NOTIFICACION</th>
+                  <th>F. INGRESO</th>
+                  <th>Nº FICHAS</th>
+                </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>TOTAL:</th>
+                <th></th>
+              </tr>
+            </tfoot>
+          </table>
+          <!--RESUMEN-->
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment-timezone-with-data.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.full.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mousetrap/1.6.3/mousetrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.1/xlsx.full.min.js"></script>
+    <script src="//cdn.datatables.net/plug-ins/1.11.4/api/sum().js"></script>
+    <script>
+      var netlabdata
+      var negativos
+      var resumennegativos
+       $(document).ready(function() {
+        
+        netlabdata=$('#example').DataTable( {
+              "language": {
+                  "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+              },
+              "processing": true,
+              "serverSide": true,
+              "ajax": {
+                  "url": "/dtablePacientesNetLab",
+                  'data' : { 
+                    'ordenarID' : function() { return $('#input__id').is(':checked')?true:false},
+                    'desde' : function() { return $('#input__desde').val()} ,
+                    'hasta' : function() { return $('#input__hasta').val()},
+                    'revisado' : function() { return $('#input__revisado').val()},
+                  },
+                  "type": "GET",
+                  "dataSrc": function ( json ) {
+                      return json.data;
+                  }
+              },
+              "columns": [
+                  { "data": "id" },
+                  { "data": "documento" },
+                  { "data": "ndocumento" },
+                  { "data": "fobtencion" },
+                  { "data": "revisado" },
+                  { "data": "tprueba" },
+                  { "data": "error" },
+                  { "data": "createAt" },
+                  { "data": "revisado" },
+              ],
+              "columnDefs":[
+                {
+                  "targets":3,
+                  "render":function(data,type,row){
+                    return moment(data,'YYYY-MM-DD').format('DD/MM/YYYY')
+                  }
+                },
+                {
+                  "targets":4,
+                  "render":function(data,type,row){
+                    if(data==false){
+                      return `<button type="button" class="btn btn-sm btn-danger" style="width: 100%; height: 100%;"></button>`
+                    }else if(data==true){
+                      return `<button type="button" class="btn btn-sm btn-success" style="width: 100%; height: 100%;"></button>`
+                    }
+                  }
+                },{
+                  "targets":7,
+                  "render":function(data,type,row){
+                    return moment(data,'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')
+                  }
+                },{
+                  "targets":8,
+                  "render":function(data,type,row){
+                    let html=`<div class="btn-group" role="group" aria-label="Basic example">`
+                    if(data==false){
+                      return `<button type="button" class="btn eliminar btn-danger"><i class="bi bi-trash"></i></button>`
+                    }
+                    html=`</div>`
+                    return html
+                  }
+                },
+              ],
+          } );
+
+          negativos=$('#negativos').DataTable({
+              "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
+              "language": {
+                  "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+              },
+              "processing": true,
+              "serverSide": true,
+              "scrollX": true,
+              "ordering": false,
+              "ajax": {
+                  "url": "/listarnegativos",
+                  'data' : { 
+                    'ordenarID' : function() { return $('#inputn__id').is(':checked')?true:false},
+                    'desde' : function() { return $('#inputn__desde').val()==''?0:$('#inputn__desde').val()},
+                    'hasta' : function() { return $('#inputn__hasta').val()==''?0:$('#inputn__hasta').val()},
+                    'fnotificacion' : function() { return $('#inputn__fnotificacion').val()},
+                    'eess' : function() { return $('#inputn__eess').val()}
+                  },
+                  "type": "GET",
+                  "dataSrc": function ( json ) {
+                      return json.data;
+                  }
+              },
+              "columns": [
+                  {"defaultContent": "<button type='button' class='form btn btn-primary btn-sm' onclick='editar__negativos(this)'><i class='bi bi-pencil-square'></i></button>"},
+                  { "data": "id" },
+                  { "data": "ftomamuestra" },
+                  { "data": "microred"},
+                  { "data": "eess" },
+                  { "data": "ndocumento" },
+                  { "data": "nombres" },
+                  { "data": "telefono" },
+                  { "data": "edad" },
+                  { "data": "sexo" },
+                  { "data": "residactual" },
+                  { "data": "vacccovid" },
+                  { "data": "f1sosis" },
+                  { "data": "f2dosis" },
+                  { "data": "tvacuna" },
+                  { "data": "f3dosis" },
+                  { "data": "tvacuna2" },
+              ],
+              "columnDefs":[
+                {
+                  "targets":[2,12,13,15],
+                  "render":function(data,type,row){
+                    if(data!=null) {return moment(data,'YYYY-MM-DD').format('DD/MM/YYYY')}
+                    return ""
+                  }
+                },
+              ],
+          })
+
+          jQuery.fn.dataTable.Api.register( 'sum()', function ( ) {
+              return this.flatten().reduce( function ( a, b ) {
+                  var x = parseFloat(a) || 0;
+                  var y = parseFloat($(b).attr('data-order')) || 0;
+                  return x + y
+              }, 0 );
+          } );
+
+          resumennegativos=$('#resumen_negativos').DataTable({
+            "searching": false,
+            "paging": false,
+            "ordering": false,
+            "language": {
+                  "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+            },
+            "ajax": {
+                "url": "/resumennegativos",
+                'data' : { 
+                  'agrupar' : function() { return $('#input__group_agrupar').val()},
+                  'desde' : function() { return $('#input__group_desde').val()},
+                  'hasta' : function() { return $('#input__group_hasta').val()},
+                  'fnotificacion' : function() { return $('#input__group_fnotificacion').val()},
+                  'eess' : function() { return $('#input__group_eess').val()}
+                },
+                "type": "GET",
+                "dataSrc": function ( json ) {
+                  return json.data;
+                }
+            },
+            "columns": [
+              { "data": "microred"},
+              { "data": "eess",width: '25%'},
+              { "data": "ftomamuestra" },
+              { "data": "fingreso" },
+              { "data": "contador",className: "text-center"},
+            ],
+            "columnDefs":[
+                {
+                  "targets":[2,3],
+                  "render":function(data,type,row){
+                    if(data!=null) {return moment(data,'YYYY-MM-DD').format('DD/MM/YYYY')}
+                    return ""
+                  }
+                },
+              ],
+            "footerCallback": function ( row, data, start, end, display ) {
+                total = this.api()
+                    //.column(1)//numero de columna a sumar
+                    .column(4, {page: 'current'})//para sumar solo la pagina actual
+                    .data()
+                    .reduce(function (a, b) {
+                        return parseInt(a) + parseInt(b);
+                    }, 0 );
+                $(this.api().column(4).footer()).html(total);
+            }
+          })
+          ExportData()
+      });
+      $( "#ndatos" ).submit(function( event ) {
+        event.preventDefault();
+        let frm=$(this)
+        $.ajax({
+            type: frm.attr('method'),
+            url: frm.attr('action'),
+            data: frm.serialize(),
+            success: function (data) {
+              $("#input__dni").val('').focus();
+              netlabdata.ajax.reload();
+            },
+            error: function (data) {
+              alert(data.msg);
+            },
+        });
+      });
+
+      $('#input__id,#input__revisado,#input__desde,#input__hasta').on('change', function() {
+        netlabdata.ajax.reload();
+      });
+
+      $('#inputn__id,#inputn__desde,#inputn__hasta,#inputn__fnotificacion').on('change', function() {
+        negativos.ajax.reload();
+      });
+      $( "#inputn__eess" ).keyup(function() {
+        negativos.ajax.reload();
+      });
+      $( "#pvacuna" ).keyup(function() {
+          $("#svacuna").val($(this).val())
+      });
+      //
+      /*$( "#find_ndocumento" ).keyup(function(e) {
+        console.log(e.which)
+        if(e.which == 13) {
+          
+        }
+      });*/
+      
+      function calcularEdad(fecha) {
+          var hoy = new Date();
+          var cumpleanos = new Date(fecha);
+          var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+          var m = hoy.getMonth() - cumpleanos.getMonth();
+          if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+              edad--;
+          }
+          return edad;
+      }
+
+      $( "#formNegativos a" ).click(function() {
+        let frm=$("#formNegativos")
+        //console.log(frm.attr('method'),frm.attr('action'),frm.serialize())
+        $.ajax({
+            type: frm.attr('method'),
+            url: frm.attr('action'),
+            data: frm.serialize(),
+            success: function (data) {
+              $("#find_ndocumento").focus();
+              $("#find_ndocumento,#nombres,#telefono,#edad,#sexo,#resid_actual,#vac_covid,#f1dosis,#pvacuna,#f2dosis,#svacuna,#f3dosis,#tvacuna").val("")
+              negativos.ajax.reload();
+              if(data.accion=='update'){
+                $("#formNegativos a").html("Guardar <i>(alt+g)</i>")
+                $('#formNegativos ').attr('action', `guardarnegativo/`);
+              }
+            },
+            error: function (data) {
+              alert(data.msg);
+            },
+        });
+      });
+      
+      $( "#generarxslx" ).click(function() {
+        data=[]
+        $.each(negativos.rows().data(), function( index, value ) {
+          data[index]=value
+          data[index].id=index+1
+          data[index].ftomamuestra=data[index].ftomamuestra!=null?moment(data[index].ftomamuestra,'YYYY-MM-DD').format('DD/MM/YYYY'):''
+          data[index].f1sosis=data[index].f1sosis!=null?moment(data[index].f1sosis,'YYYY-MM-DD').format('DD/MM/YYYY'):''
+          data[index].f2dosis=data[index].f2dosis!=null?moment(data[index].f2dosis,'YYYY-MM-DD').format('DD/MM/YYYY'):''
+          data[index].f3dosis=data[index].f3dosis!=null?moment(data[index].f3dosis,'YYYY-MM-DD').format('DD/MM/YYYY'):''
+        });
+        ExportData(data)
+      });
+      function ExportData(data){
+        filename='negativos.xlsx';
+        var ws = XLSX.utils.json_to_sheet(data);
+        var wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "People");
+        XLSX.writeFile(wb,filename);
+      }
+      function editar__negativos(th){
+        data=negativos.row($(th).parents("tr")).data()
+        $("#fnotificacion").val(data.ftomamuestra)
+        $("#microred").val(data.microred)
+        $("#eess").val(data.eess)
+        $('#select_eess').append(new Option(data.eess,'-', true, true)).trigger('change');
+        $("#find_ndocumento").val(data.ndocumento)
+        $("#nombres").val(data.nombres)
+        $("#telefono").val(data.telefono)
+        $("#edad").val(data.edad)
+        $("#sexo").val(data.sexo)
+        $("#resid_actual").val(data.residactual)
+        $("#vac_covid").val(data.vacccovid)
+        $("#f1dosis").val(data.f1sosis)
+        $("#pvacuna").val(data.tvacuna)
+        $("#f2dosis").val(data.f2dosis)
+        $("#svacuna").val(data.tvacuna)
+        $("#f3dosis").val(data.f3dosis)
+        $("#tvacuna").val(data.tvacuna2)
+        $("#hidden__input_id").val(data.id)
+        $("#formNegativos a").html("Actualizar <i>(alt+g)</i>")
+        $('#formNegativos ').attr('action', `actualizarnegativos/`);
+      }
+
+      $("#select_eess").select2({
+          width: '100%', // need to override the changed default
+          ajax: {
+            url:  'listaeess/', //routing
+            dataType: 'json',
+            delay: 250,
+            method:'GET',
+            data: function (params) {
+              return {
+                name: params.term || '', // search term
+                page: params.page || 0,
+                format: 'select2',
+                defunctDisabled: true
+              };
+            },
+            processResults: function (data, params) {
+              params.page = params.page || 0;
+              var arr = data.data;
+              $.each(arr, function( index, value ) {
+                arr[index].text=value.eess
+                arr[index].id=value.id
+              });
+              return {
+                results: arr,
+                pagination: {more: (params.page) < (data.total-1)}
+              }
+            },
+          },
+      });
+
+      $("#select_eess").change(function() {
+        let data=$(this).select2('data')[0]
+        if(data.microred){
+          $("#microred").val(data.microred)
+          $("#eess").val(data.text)
+        }
+      });
+      $("#input__group_agrupar,#input__group_desde,#input__group_hasta,#input__group_fnotificacion,#input__group_eess").change(function() {
+        resumennegativos.ajax.reload();
+      });
+      Mousetrap.bind(['alt+g'], function() {
+        $( "#formNegativos a" ).click()
+        return false;
+      })
+      Mousetrap.bind(['alt+1'], function() {
+        $( "#fnotificacion" ).focus();
+        return false;
+      })
+      Mousetrap.bind(['alt+2'], function() {
+        $("#select_eess").select2('open');
+        return false;
+      })
+      Mousetrap.bind(['alt+3'], function() {
+        $("#find_ndocumento").focus();
+        return false;
+      })
+      Mousetrap.bind(['alt+4'], function() {
+        $("#telefono").focus();
+        return false;
+      })
+      Mousetrap.bind(['alt+5'], function() {
+        $("#resid_actual").focus();
+        return false;
+      })
+      Mousetrap.bind(['alt+6'], function() {
+        $("#f1dosis").focus();
+        return false;
+      })
+      Mousetrap.bind(['alt+7'], function() {
+        $("#f2dosis").focus();
+        return false;
+      })
+      Mousetrap.bind(['alt+8'], function() {
+        $("#f3dosis").focus();
+        return false;
+      })
+      
+      Mousetrap.bind(['alt+b'], function() {
+        $.get( "buscarvacunado/",{ndocumento:$("#find_ndocumento").val()}, function(data) {
+          if(data.msg.length>0){
+            data=data.msg
+            console.log(data)
+            $("#nombres").val(data[0].nombres)
+            $("#sexo").val(data[0].sexo)
+            $("#vac_covid").val("SI")
+            $("#edad").val(calcularEdad(data[0].fnacimeinto))
+            $.each(data, function( index, value ) {
+              if(value.ndosis==1){
+                $("#f1dosis").val(value.fvacuna)
+                $("#pvacuna").val(value.vacuna)
+              }else if(value.ndosis==2){
+                $("#f2dosis").val(value.fvacuna)
+                $("#svacuna").val(value.vacuna)
+              }else if(value.ndosis==3){
+                $("#f3dosis").val(value.fvacuna)
+                $("#tvacuna").val(value.vacuna)
+              }
+            });
+          }else{
+            $("#vac_covid").val("NO")
+            alert( "No hay registros!!" );
+          }
+        }).fail(function() {
+          alert( "error" );
+        })
+        return false;
+      });
+
+      Mousetrap.bind(['ctrl+1'], function() {
+        //alert("holas control")
+        $("#inputn__id").click();
+        return false;
+      })
+      Mousetrap.bind(['ctrl+2'], function() {
+        $("#inputn__desde").focus();
+        return false;
+      })
+      Mousetrap.bind(['ctrl+3'], function() {
+        $("#inputn__hasta").focus();
+        return false;
+      })
+      Mousetrap.bind(['ctrl+4'], function() {
+        $("#inputn__fnotificacion").focus();
+        return false;
+      })
+      Mousetrap.bind(['ctrl+5'], function() {
+        $("#inputn__eess").focus();
+        return false;
+      })
+      Mousetrap.bind(['ctrl+g'], function() {
+        $( "#generarxslx" ).click()
+        return false;
+      })
+    </script>
+  </body>
+</html>

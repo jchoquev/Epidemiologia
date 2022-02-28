@@ -1,0 +1,6 @@
+python3 manage.py startapp 'Nombre'
+python3 manage.py check 'nombre'
+python3 manage.py makemigrations
+python3 manage.py sqlmigrate 'nombre' 0001
+python3 manage.py migrate
+
